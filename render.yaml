@@ -1,0 +1,21 @@
+services:
+  - type: web
+    name: couple-album-api
+    runtime: docker
+    dockerfilePath: ./packages/server/Dockerfile
+    plan: free
+    envVars:
+      - key: DATABASE_URL
+        value: file:./couple-album.db
+      - key: JWT_SECRET
+        generateValue: true
+      - key: CORS_ORIGIN
+        sync: false
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+    disk:
+      name: couple-album-data
+      mountPath: /app/uploads
+      sizeGB: 1

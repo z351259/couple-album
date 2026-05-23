@@ -1,0 +1,90 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --color-romantic: #ec4899;
+    --color-romantic-light: #fdf2f8;
+  }
+
+  body {
+    @apply font-sans antialiased;
+    background: linear-gradient(135deg, #fdf2f8 0%, #ffffff 50%, #fce7f3 100%);
+    min-height: 100vh;
+  }
+}
+
+@layer components {
+  .photo-card {
+    @apply relative overflow-hidden rounded-lg shadow-lg transition-all duration-300;
+  }
+
+  .photo-card:hover {
+    @apply shadow-xl scale-[1.02];
+  }
+
+  .glass-effect {
+    @apply bg-white/80 backdrop-blur-md;
+  }
+
+  .romantic-border {
+    @apply border-2 border-pink-200 rounded-xl;
+  }
+}
+
+@layer utilities {
+  .text-gradient {
+    @apply bg-gradient-to-r from-pink-500 to-rose-500 bg-clip-text text-transparent;
+  }
+}
+
+/* 自定义滚动条 */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-pink-50;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-pink-300 rounded-full;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-pink-400;
+}
+
+/* PhotoSwipe 自定义样式 */
+.pswp__custom-caption {
+  @apply absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/70 to-transparent text-white;
+}
+
+/* 花瓣飘落动画 */
+@keyframes petal-fall {
+  0% {
+    transform: translateY(-10vh) rotate(0deg) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100vh) rotate(720deg) scale(0.5);
+    opacity: 0;
+  }
+}
+
+.petal {
+  animation: petal-fall var(--duration, 10s) linear infinite;
+  animation-delay: var(--delay, 0s);
+}
+
+/* 星空背景 */
+.starry-bg {
+  background: radial-gradient(ellipse at bottom, #1a1a2e 0%, #16213e 100%);
+}
+
+.star {
+  animation: twinkle var(--duration, 3s) ease-in-out infinite;
+  animation-delay: var(--delay, 0s);
+}

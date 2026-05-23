@@ -1,0 +1,147 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./couple-album.db"
+}
+
+model User {
+  id              String    @id @default(uuid())
+  username        String    @unique
+  passwordHash    String    @map("password_hash")
+  nickname        String
+  avatar          String?
+  anniversaryDate DateTime? @map("anniversary_date")
+  createdAt       DateTime  @default(now()) @map("created_at")
+  updatedAt       DateTime  @updatedAt @map("updated_at")
+
+  photos       Photo[]
+  albums       Album[]
+  comments     Comment[]
+  shareLinks   ShareLink[]
+  favorites    Favorite[]
+  photoVisits  PhotoVisit[]
+
+  @@map("users")
+}
+
+model Photo {
+  id           String    @id @default(uuid())
+  filename     String
+  originalUrl  String    @map("original_url")
+  largeUrl     String    @map("large_url")
+  mediumUrl    String    @map("medium_url")
+  thumbnailUrl String    @map("thumbnail_url")
+  fileSize     Int       @map("file_size")
+  width        Int
+  height       Int
+  takenAt      DateTime? @map("taken_at")
+  location     String?
+  latitude     Float?
+  longitude    Float?
+  mood         String?
+  mood2        String?   // 第二个人的心情
+  secretMessage String?  @map("secret_message")  // 悄悄话
+  tags         String    @default("[]")  // JSON 数组字符串
+  blurhash     String?
+  sortOrder    Int       @default(0) @map("sort_order")
+  albumId      String?   @map("album_id")
+  uploadedBy   String    @map("uploaded_by")
+  createdAt    DateTime  @default(now()) @map("created_at")
+  updatedAt    DateTime  @updatedAt @map("updated_at")
+
+  album        Album?      @relation(fields: [albumId], references: [id], onDelete: SetNull)
+  user         User        @relation(fields: [uploadedBy], references: [id])
+  comments     Comment[]
+  favorites    Favorite[]
+  visits       PhotoVisit[]
+
+  @@index([albumId])
+  @@index([uploadedBy])
+  @@index([createdAt])
+  @@map("photos")
+}
+
+model Favorite {
+  id        String   @id @default(uuid())
+  photoId   String   @map("photo_id")
+  userId    String   @map("user_id")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  photo     Photo    @relation(fields: [photoId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id])
+
+  @@unique([photoId, userId])
+  @@index([photoId])
+  @@index([userId])
+  @@map("favorites")
+}
+
+model Album {
+  id          String    @id @default(uuid())
+  name        String
+  description String?
+  coverUrl    String?   @map("cover_url")
+  sortOrder   Int       @default(0) @map("sort_order")
+  createdBy   String    @map("created_by")
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+
+  user        User      @relation(fields: [createdBy], references: [id])
+  photos      Photo[]
+
+  @@index([createdBy])
+  @@map("albums")
+}
+
+model Comment {
+  id        String   @id @default(uuid())
+  content   String
+  photoId   String   @map("photo_id")
+  userId    String   @map("user_id")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  photo     Photo    @relation(fields: [photoId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id])
+
+  @@index([photoId])
+  @@index([userId])
+  @@map("comments")
+}
+
+model ShareLink {
+  id         String    @id @default(uuid())
+  token      String    @unique
+  pinCode    String?   @map("pin_code")
+  expiresAt  DateTime? @map("expires_at")
+  maxViews   Int?      @map("max_views")
+  viewCount  Int       @default(0) @map("view_count")
+  isActive   Boolean   @default(true) @map("is_active")
+  albumId    String?   @map("album_id")
+  createdBy  String    @map("created_by")
+  createdAt  DateTime  @default(now()) @map("created_at")
+
+  user       User      @relation(fields: [createdBy], references: [id])
+
+  @@index([token])
+  @@index([createdBy])
+  @@map("share_links")
+}
+
+model PhotoVisit {
+  id        String   @id @default(uuid())
+  photoId   String   @map("photo_id")
+  userId    String   @map("user_id")
+  viewedAt  DateTime @default(now()) @map("viewed_at")
+
+  photo     Photo    @relation(fields: [photoId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id])
+
+  @@unique([photoId, userId])
+  @@index([photoId])
+  @@index([userId])
+  @@map("photo_visits")
+}

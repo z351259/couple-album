@@ -1,0 +1,20 @@
+{
+  "name": "couple-album",
+  "version": "1.0.0",
+  "private": true,
+  "description": "情侣共享相册 - 一个浪漫的照片分享平台",
+  "scripts": {
+    "dev:client": "pnpm --filter client dev",
+    "dev:server": "pnpm --filter server dev",
+    "build:client": "pnpm --filter client build",
+    "build:server": "pnpm --filter server build",
+    "db:migrate": "pnpm --filter server db:migrate",
+    "db:seed": "pnpm --filter server db:seed",
+    "docker:up": "docker-compose up -d",
+    "docker:down": "docker-compose down"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "packageManager": "pnpm@10.10.0"
+}
