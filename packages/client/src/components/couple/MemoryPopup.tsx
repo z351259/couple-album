@@ -98,7 +98,7 @@ export default function MemoryPopup({ photos, anniversaryDate }: MemoryPopupProp
               </div>
 
               {memory.mood && (
-                <p className="text-2xl mb-2">{memory.mood}</span>
+                <p className="text-2xl mb-2">{memory.mood}</p>
               )}
 
               {memory.location && (
