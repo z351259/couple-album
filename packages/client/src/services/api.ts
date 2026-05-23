@@ -121,7 +121,7 @@ export const commentApi = {
 
 // 分享 API
 export const shareApi = {
-  create: (data: { photoIds?: string[]; albumId?: string; pinCode?: string; expiresIn?: number }): Promise<ApiResponse<ShareLink>> =>
+  create: (data: { photoIds?: string[]; albumId?: string; pinCode?: string; expiresIn?: number; maxViews?: number }): Promise<ApiResponse<ShareLink>> =>
     api.post('/shares', data),
 
   getByToken: (token: string, pinCode?: string): Promise<ApiResponse<{ photos: Photo[]; album?: Album }>> =>
