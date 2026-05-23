@@ -22,13 +22,11 @@ api.interceptors.request.use((config) => {
 api.interceptors.response.use(
   (response) => response.data,
   (error) => {
-    const message = error.response?.data?.error || '请求失败'
+    const isOnLoginPage = window.location.pathname === '/login'
 
-    if (error.response?.status === 401) {
+    if (error.response?.status === 401 && !isOnLoginPage) {
       localStorage.removeItem('token')
-      // 使用 toast 提示用户
       toast.error('登录已过期，请重新登录')
-      // 延迟跳转，让用户看到提示
       setTimeout(() => {
         window.location.href = '/login'
       }, 1000)
@@ -144,6 +142,72 @@ export const favoriteApi = {
 
   check: (photoId: string): Promise<ApiResponse<{ isFavorited: boolean }>> =>
     api.get(`/favorites/check/${photoId}`),
+}
+
+// 情侣配对 API
+export const coupleApi = {
+  createInvite: (): Promise<ApiResponse<{ code: string; expiresAt: string }>> =>
+    api.post('/couple/invite'),
+
+  getInvite: (): Promise<ApiResponse<{ code: string; expiresAt: string } | null>> =>
+    api.get('/couple/invite'),
+
+  cancelInvite: (): Promise<ApiResponse<void>> =>
+    api.delete('/couple/invite'),
+
+  acceptInvite: (code: string): Promise<ApiResponse<{ coupleId: string; partnerId: string }>> =>
+    api.post('/couple/accept', { code }),
+
+  getPartner: (): Promise<ApiResponse<{ id: string; username: string; nickname: string; avatar?: string } | null>> =>
+    api.get('/couple/partner'),
+
+  unlink: (): Promise<ApiResponse<void>> =>
+    api.delete('/couple/unlink'),
+}
+
+// 管理后台 API
+export const adminApi = {
+  getStats: (): Promise<ApiResponse<{ users: number; photos: number; albums: number; comments: number; shareLinks: number; totalFileSize: number }>> =>
+    api.get('/admin/stats'),
+
+  getUsers: (): Promise<ApiResponse<any[]>> =>
+    api.get('/admin/users'),
+
+  updateUserRole: (id: string, role: string): Promise<ApiResponse<any>> =>
+    api.put(`/admin/users/${id}/role`, { role }),
+
+  resetPassword: (id: string, password: string): Promise<ApiResponse<void>> =>
+    api.put(`/admin/users/${id}/password`, { password }),
+
+  deleteUser: (id: string): Promise<ApiResponse<void>> =>
+    api.delete(`/admin/users/${id}`),
+
+  getPhotos: (params?: { page?: number; limit?: number }): Promise<ApiResponse<PaginatedResponse<Photo>>> =>
+    api.get('/admin/photos', { params }),
+
+  deletePhoto: (id: string): Promise<ApiResponse<void>> =>
+    api.delete(`/admin/photos/${id}`),
+
+  getAlbums: (): Promise<ApiResponse<any[]>> =>
+    api.get('/admin/albums'),
+
+  deleteAlbum: (id: string): Promise<ApiResponse<void>> =>
+    api.delete(`/admin/albums/${id}`),
+
+  getComments: (params?: { page?: number; limit?: number }): Promise<ApiResponse<PaginatedResponse<Comment>>> =>
+    api.get('/admin/comments', { params }),
+
+  deleteComment: (id: string): Promise<ApiResponse<void>> =>
+    api.delete(`/admin/comments/${id}`),
+
+  getShares: (): Promise<ApiResponse<any[]>> =>
+    api.get('/admin/shares'),
+
+  deactivateShare: (id: string): Promise<ApiResponse<void>> =>
+    api.put(`/admin/shares/${id}/deactivate`),
+
+  deleteShare: (id: string): Promise<ApiResponse<void>> =>
+    api.delete(`/admin/shares/${id}`),
 }
 
 export default api

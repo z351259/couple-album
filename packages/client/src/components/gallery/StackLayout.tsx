@@ -3,6 +3,9 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { ChevronLeft, ChevronRight, X } from 'lucide-react'
 import useStore from '@/stores/useStore'
 import type { Photo } from '@/types'
+import PhotoViewer from '@/components/photo/PhotoViewer'
+import DraggablePhoto from './DraggablePhoto'
+import { toast } from '@/components/common/Toast'
 
 interface StackLayoutProps {
   photos: Photo[]
@@ -101,21 +104,21 @@ export default function StackLayout({ photos }: StackLayoutProps) {
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
             {photos.map((photo, index) => (
-              <motion.div
+              <DraggablePhoto
                 key={photo.id}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.05 }}
-                className="aspect-square cursor-pointer rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow"
-                onClick={() => handleClick(photo)}
+                photo={photo}
+                index={index}
+                className="aspect-square rounded-xl overflow-hidden shadow-lg"
+                onDragEnd={() => toast.success('照片已移动')}
               >
                 <img
                   src={photo.mediumUrl || photo.thumbnailUrl}
                   alt={photo.filename}
-                  className="w-full h-full object-cover hover:scale-110 transition-transform duration-300"
+                  className="w-full h-full object-cover"
                   loading="lazy"
+                  draggable={false}
                 />
-              </motion.div>
+              </DraggablePhoto>
             ))}
           </div>
         </div>

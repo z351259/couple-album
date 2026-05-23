@@ -4,6 +4,9 @@ export interface User {
   username: string
   nickname: string
   avatar?: string
+  role?: string
+  coupleId?: string
+  partnerId?: string
   anniversaryDate?: string
   createdAt: string
   updatedAt: string

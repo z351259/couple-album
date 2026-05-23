@@ -8,6 +8,7 @@ import Album from './pages/Album'
 import Upload from './pages/Upload'
 import Share from './pages/Share'
 import Login from './pages/Login'
+import Admin from './pages/Admin'
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
             <Route path="/upload" element={<Upload />} />
             <Route path="/share/:token" element={<Share />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/admin" element={<Admin />} />
           </Routes>
         </AnimatePresence>
       </div>

@@ -1,6 +1,6 @@
 import { Link, useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { Heart, Upload, LogOut, Menu, X } from 'lucide-react'
+import { Heart, Upload, LogOut, Menu, X, Settings } from 'lucide-react'
 import useStore from '@/stores/useStore'
 import MobileMenu from './MobileMenu'
 
@@ -65,6 +65,16 @@ export default function Header() {
                       {user?.nickname}
                     </span>
                   </div>
+
+                  {user?.role === 'admin' && (
+                    <Link
+                      to="/admin"
+                      className="p-2 text-gray-500 hover:text-pink-500 transition-colors"
+                      title="管理后台"
+                    >
+                      <Settings className="w-5 h-5" />
+                    </Link>
+                  )}
 
                   <button
                     onClick={handleLogout}

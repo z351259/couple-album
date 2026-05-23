@@ -1,7 +1,7 @@
 import { useState, useCallback, useEffect } from 'react'
-import { useNavigate, Navigate } from 'react-router-dom'
+import { useNavigate, Navigate, Link } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Upload as UploadIcon, X, Image, CheckCircle, AlertCircle } from 'lucide-react'
+import { Upload as UploadIcon, X, Image, CheckCircle, AlertCircle, ArrowLeft } from 'lucide-react'
 import useStore from '@/stores/useStore'
 import { photoApi } from '@/services/api'
 
@@ -134,7 +134,15 @@ export default function Upload() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
       >
-        <h1 className="text-3xl font-bold text-gradient mb-8">上传照片</h1>
+        <div className="flex items-center gap-4 mb-8">
+          <Link
+            to="/"
+            className="p-2 text-gray-500 hover:text-pink-500 hover:bg-pink-50 rounded-lg transition-colors"
+          >
+            <ArrowLeft className="w-5 h-5" />
+          </Link>
+          <h1 className="text-3xl font-bold text-gradient">上传照片</h1>
+        </div>
 
         {/* 拖拽区域 */}
         <div
@@ -169,6 +177,22 @@ export default function Upload() {
             </p>
           </motion.div>
         </div>
+
+        {/* 上传成功后查看相册 */}
+        {files.some((f) => f.status === 'success') && (
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mt-6 text-center"
+          >
+            <Link
+              to="/"
+              className="inline-flex items-center gap-2 px-6 py-3 bg-pink-500 text-white rounded-xl hover:bg-pink-600 transition-colors"
+            >
+              查看相册
+            </Link>
+          </motion.div>
+        )}
 
         {/* 文件列表 */}
         {files.length > 0 && (

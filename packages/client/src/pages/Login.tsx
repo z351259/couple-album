@@ -34,7 +34,7 @@ export default function Login() {
         setError(response.error || '操作失败')
       }
     } catch (err: any) {
-      setError(err.message || '网络错误')
+      setError(err.error || err.message || '网络错误')
     } finally {
       setLoading(false)
     }

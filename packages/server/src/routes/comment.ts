@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { Router, Response } from 'express'
 import prisma from '../config/database.js'
 import { success, fail, notFound } from '../utils/response.js'

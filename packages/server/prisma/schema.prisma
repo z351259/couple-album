@@ -13,6 +13,8 @@ model User {
   passwordHash    String    @map("password_hash")
   nickname        String
   avatar          String?
+  role            String    @default("user")
+  coupleId        String?   @map("couple_id")
   anniversaryDate DateTime? @map("anniversary_date")
   createdAt       DateTime  @default(now()) @map("created_at")
   updatedAt       DateTime  @updatedAt @map("updated_at")
@@ -23,6 +25,8 @@ model User {
   shareLinks   ShareLink[]
   favorites    Favorite[]
   photoVisits  PhotoVisit[]
+  couple       Couple?    @relation(fields: [coupleId], references: [id])
+  sentInvites  Invitation[] @relation("InviteSender")
 
   @@map("users")
 }
@@ -144,4 +148,30 @@ model PhotoVisit {
   @@index([photoId])
   @@index([userId])
   @@map("photo_visits")
+}
+
+model Couple {
+  id        String   @id @default(uuid())
+  user1Id   String   @map("user1_id")
+  user2Id   String   @map("user2_id")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  users User[]
+
+  @@map("couples")
+}
+
+model Invitation {
+  id        String   @id @default(uuid())
+  code      String   @unique
+  fromUser  String   @map("from_user")
+  status    String   @default("pending")
+  expiresAt DateTime @map("expires_at")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  sender User @relation("InviteSender", fields: [fromUser], references: [id], onDelete: Cascade)
+
+  @@index([code])
+  @@index([fromUser])
+  @@map("invitations")
 }

@@ -30,6 +30,7 @@ import ShareDialog from '@/components/share/ShareDialog'
 import PhotoSearch, { SearchFilters } from '@/components/photo/PhotoSearch'
 import BatchOperations from '@/components/photo/BatchOperations'
 import FloatingHearts from '@/components/common/FloatingHearts'
+import CoupleSetup from '@/pages/CoupleSetup'
 
 export default function Home() {
   const { isAuthenticated, user, setUser, photos, albums, setPhotos, setAlbums, layoutMode } = useStore()
@@ -236,6 +237,16 @@ export default function Home() {
         </motion.div>
       </div>
     )
+  }
+
+  // 未配对时显示配对引导
+  if (!user?.coupleId) {
+    return <CoupleSetup onPaired={() => {
+      // 重新加载用户信息
+      authApi.getProfile().then(res => {
+        if (res.success && res.data) setUser(res.data)
+      })
+    }} />
   }
 
   return (

@@ -4,41 +4,23 @@ import prisma from './config/database.js'
 async function main() {
   console.log('🌱 开始填充数据库...')
 
-  // 创建测试用户
-  const passwordHash = await bcrypt.hash('123456', 10)
-
-  const user1 = await prisma.user.upsert({
-    where: { username: 'boy' },
-    update: {},
-    create: {
-      username: 'boy',
-      passwordHash,
-      nickname: '小明',
-    },
-  })
-
-  const user2 = await prisma.user.upsert({
-    where: { username: 'girl' },
-    update: {},
-    create: {
-      username: 'girl',
-      passwordHash,
-      nickname: '小红',
-    },
-  })
-
-  console.log('✅ 用户创建完成:', { user1: user1.username, user2: user2.username })
-
-  // 创建示例相册
-  const album = await prisma.album.create({
-    data: {
-      name: '我们的旅行',
-      description: '记录每一次美好的旅行',
-      createdBy: user1.id,
-    },
-  })
-
-  console.log('✅ 相册创建完成:', album.name)
+  // 创建 root 管理员
+  const existing = await prisma.user.findUnique({ where: { username: 'root' } })
+  if (existing) {
+    console.log('root 用户已存在，更新为管理员')
+    await prisma.user.update({ where: { username: 'root' }, data: { role: 'admin' } })
+  } else {
+    const passwordHash = await bcrypt.hash('root', 10)
+    const user = await prisma.user.create({
+      data: {
+        username: 'root',
+        passwordHash,
+        nickname: '管理员',
+        role: 'admin',
+      },
+    })
+    console.log('✅ root 管理员创建成功:', user.id)
+  }
 
   console.log('🎉 数据库填充完成！')
 }
