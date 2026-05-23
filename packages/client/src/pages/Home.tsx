@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Heart, Calendar, Map, Clock, Settings, X, Share2, Trophy, BookOpen, Gift, Brain } from 'lucide-react'
+import { Heart, Calendar, Map, Clock, Settings, X, Share2, Trophy, BookOpen, Gift, Brain, Check } from 'lucide-react'
 import useStore from '@/stores/useStore'
 import { photoApi, albumApi, authApi } from '@/services/api'
 import { toast } from '@/components/common/Toast'

@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import { Grid3X3, Columns, Calendar, Image, Layers, Film, Heart, Play, Map, Box, Globe, Stack } from 'lucide-react'
+import { Grid3X3, Columns, Calendar, Image, Layers, Film, Heart, Play, Map, Box, Globe, Layers3 } from 'lucide-react'
 import useStore from '@/stores/useStore'
 import type { LayoutMode } from '@/types'
 
@@ -12,7 +12,7 @@ const layouts: { mode: LayoutMode; icon: React.ReactNode; label: string }[] = [
   { mode: 'collage', icon: <Layers className="w-5 h-5" />, label: '拼贴' },
   { mode: 'heart', icon: <Heart className="w-5 h-5" />, label: '爱心' },
   { mode: 'story', icon: <Play className="w-5 h-5" />, label: '故事' },
-  { mode: 'stack', icon: <Stack className="w-5 h-5" />, label: '堆叠' },
+  { mode: 'stack', icon: <Layers3 className="w-5 h-5" />, label: '堆叠' },
   { mode: 'free-canvas', icon: <Box className="w-5 h-5" />, label: '画布' },
   { mode: 'carousel-3d', icon: <Globe className="w-5 h-5" />, label: '3D轮播' },
   { mode: 'map', icon: <Map className="w-5 h-5" />, label: '地图' },
